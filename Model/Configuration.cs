@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CryptoPortfolioReader.Model.Portfolio;
+using CryptoPortfolioReader.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -25,9 +26,17 @@ namespace CryptoPortfolioReader.Model
 
         internal List<IPortfolio> Portfolios { get; } = new List<IPortfolio>();
 
+        internal TelegramConfiguration TelegramConfiguration { get; private set; }
+
         internal void ReadFromFile(string filepath)
         {
             var config = new Configuration();
+
+            // Telegram
+            if (tryCreateTelegram(filepath, out TelegramConfiguration telegramConfig))
+            {
+                this.TelegramConfiguration = telegramConfig;
+            }
 
             // Coinbase Pro
             if (tryCreateCoinbasePro(filepath, out CoinbaseProPortfolio coinbaseProPortfolio))
@@ -42,33 +51,47 @@ namespace CryptoPortfolioReader.Model
             }
         }
 
+        private bool tryCreateTelegram(string filepath, out TelegramConfiguration telegramConfig)
+        {
+            try
+            {
+                JObject obj = JObject.Parse(File.ReadAllText(filepath));
+                telegramConfig = JsonConvert.DeserializeObject<TelegramConfiguration>(obj["telegram"].ToString());
+                return true;
+            }
+            catch
+            {
+                telegramConfig = null;
+                return false;
+            }
+        }
+
         private bool tryCreateBinance(string filepath, out BinancePortfolio binancePortfolio)
         {
-            binancePortfolio = null;
             try
             {
                 var config = getPortfolioCofigurationFromFile<BinanceConfiguration>(filepath, "Binance");
                 binancePortfolio = new BinancePortfolio(config);
                 return true;
             }
-            catch (Exception _)
+            catch
             {
+                binancePortfolio = null;
                 return false;
             }
         }
 
         private bool tryCreateCoinbasePro(string filepath, out CoinbaseProPortfolio coinbaseProPortfolio)
         {
-            coinbaseProPortfolio = null;
-
             try
             {
                 CoinbaseProConfiguration config = getPortfolioCofigurationFromFile<CoinbaseProConfiguration>(filepath, "CoinbasePro");
                 coinbaseProPortfolio = new CoinbaseProPortfolio(config);
                 return true;
             }
-            catch (Exception _)
+            catch
             {
+                coinbaseProPortfolio = null;
                 return false;
             }
         }

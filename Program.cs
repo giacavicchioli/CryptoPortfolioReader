@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CryptoPortfolioReader.Model;
+using CryptoPortfolioReader.Services;
 
 namespace CryptoPortfolioReader
 {
@@ -28,11 +30,16 @@ namespace CryptoPortfolioReader
                 summer.Add(ab);
             }
 
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Current assets");
             foreach (var a in summer.AccountBalances.Where(c => c.Balance > 0).OrderBy(c => c.Currency))
             {
-                Console.WriteLine(a);
+                sb.AppendLine(a.ToString());
             }
 
+            var telegram = new TelegramHandler(Configuration.Instance.TelegramConfiguration);
+            await telegram.SendMessage(sb.ToString());
+            Console.WriteLine(sb.ToString());
             Console.WriteLine("Done");
         }
     }
