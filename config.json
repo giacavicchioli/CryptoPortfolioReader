@@ -1,0 +1,19 @@
+{
+    "portfolios": [
+        {
+            "name": "CoinbasePro",
+            "config": {
+                "apiKey": "COINBASE_PRO_API_KEY",
+                "apiPassphrase": "COINBASE_PRO_PASSPHRASE",
+                "apiSecret": "COINBASE_PRO_SECRET"
+            }
+        },
+        {
+            "name": "Binance",
+            "config": {
+                "apiKey": "BINANCE_API_KEY",
+                "apiSecret": "BINANCE_API_SECRET"
+            }
+        }
+    ]
+}
