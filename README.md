@@ -15,6 +15,8 @@ Get unified crypto portfolio assets from your accounts
 
 Copy your account api keys in config.json and launch the software.
 
+Telegram setup following this [link](https://tuledev.github.io/logger/swift/telegram-bot-as-a-real-time-logger/)
+
 ---
 
 ## Pull Requests are welcome
