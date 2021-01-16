@@ -15,5 +15,9 @@
                 "apiSecret": "BINANCE_API_SECRET"
             }
         }
-    ]
+    ],
+    "telegram": {
+        "apiAccessToken": "API_ACCESS_TOKEN",
+        "chatId": "CHAT_ID"
+    }
 }
